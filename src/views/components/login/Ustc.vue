@@ -37,7 +37,8 @@
         <img :src="codeUrl" @click="getCode" class="login-code-img" />
       </div>
     </el-form-item>
-    <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
+    <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住我</el-checkbox>
+    <el-button type="text" @click="goToForgetPwd" style="margin:0px 0px 0px 290px;">忘记密码?</el-button>
     <el-form-item style="width:100%;">
       <el-button :loading="loading" size="medium" type="primary" style="width:100%;"
         @click.native.prevent="handleLogin">
@@ -72,7 +73,12 @@
         type: Boolean,
         required: false,
         default: false
-      }
+      },
+      // tenantName: {
+      //   type: String,
+      //   required: false,
+      //   default: ''
+      // }
     },
     data() {
       return {
@@ -119,13 +125,27 @@
         },
         immediate: true
       },
-      showCompany(newVal, oldVal){
-            console.log(newVal, oldVal)
-            console.log(newVal == true)
-           if(newVal ===true){
-            loginForm.tenantName='COMPANY';
-           }
-      }
+      showCompany: {
+        handler(newVal, oldValue) {
+          console.log(newVal == true)
+          if (newVal) {
+            this.loginForm.tenantName = 'COMPANY';
+          }
+
+        },
+        immediate: true
+      },
+
+      // tenantName:{
+      //   handler(newVal, oldValue) {
+      //     console.log(newVal, oldValue,"77777777")
+         
+      //     this.loginForm.tenantName = newVal;
+          
+
+      //   },
+      //   immediate: true
+      // }
 
     },
     created() {
@@ -196,9 +216,17 @@
         // 判断是否达到或超过60%
         this.is60Percent = this.ratio <= 60;
       },
+
+      //跳转单位注册
       goToCompany() {
         // 使用 $emit 触发自定义事件，并传递数据
-        this.$emit('ustc-event', false);
+        this.$emit('ustc-company', false);
+      },
+      //跳转忘记密码
+      goToForgetPwd() {
+        // 使用 $emit 触发自定义事件，并传递数据
+        this.$emit('ustc-forgetPwd', false, this.loginForm.tenantName);
+
       }
 
     },

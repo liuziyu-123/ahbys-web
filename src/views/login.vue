@@ -25,8 +25,10 @@
           安徽24365大学生就业服务云平台
         </span>
       </div>
-       <Ustc  v-if="showUstc"  @ustc-event="handleUstcEvent" :show-company="showCompany" />
-       <Company v-else   @company-event="handleCompanyEvent"/>
+       <Ustc  v-if="showUstc && !showForgetPwd"  @ustc-company="handleUstcCompany" @ustc-forgetPwd="handleUstcForgetPwd"  
+          :show-company="showCompany" />
+       <Company v-else-if="!showUstc && !showForgetPwd"   @company-ustc="handleCompanyUstc"/>
+       <ForgetPassword v-else   @forget-ustc="handleForgetUstc" :tenantName="tenantName"/>
     </div>
 
     <!--  底部  -->
@@ -38,7 +40,7 @@
 
 <script>
 import { getCodeImg } from "@/api/login";
-import {Company ,Ustc }  from './components/login';
+import {Company ,Ustc , ForgetPassword}  from './components/login';
 // import Company  from './components/login/Company';
 // import Ustc  from './components/login/Ustc';
 import Cookies from "js-cookie";
@@ -47,7 +49,8 @@ export default {
   name: "Login",
   components:{
     Company,
-    Ustc
+    Ustc,
+    ForgetPassword
   },
   data() {
     return {
@@ -72,8 +75,12 @@ export default {
       redirect: undefined,
       //登录和单位注册来回切换
       showUstc: true,
+      //登录和忘记密码来回切换
+      showForgetPwd: false,
       //负责更改登录中ustc 和company 的值
-      showCompany:false
+      showCompany:false,
+      //跳转到忘记密码页面
+      tenantName:''
     };
   },
   watch: {
@@ -101,15 +108,35 @@ export default {
       // 判断是否达到或超过60%
       this.is60Percent = this.ratio <= 60;
     },
-    // 处理子组件传递过来的数据
-    handleCompanyEvent(data) {
+    // 处理子组件传递过来的数据  单位注册-登录
+    handleCompanyUstc(data) {
+
+      //显示登录界面
       this.showUstc = data
+
+      //登录界面显示company
       this.showCompany=true
       
     },
-    handleUstcEvent(data){
-      console.log(data)
+    //处理登录组件传过来的值 登录-单位注册
+    handleUstcCompany(data){
       this.showUstc = data;
+      console.log(!this.showUstc )
+      console.log(this.showForgetPwd)
+    
+      //this.
+    },
+
+    handleUstcForgetPwd(showUstc,tenantName){
+      this.showUstc = showUstc;
+      this.showForgetPwd=true;
+      this.tenantName=tenantName
+    },
+
+    handleForgetUstc(showUstc,isCompany){
+      this.showUstc = showUstc;
+      this.showForgetPwd = !showUstc;
+      this.showCompany=isCompany
     }
  
   },

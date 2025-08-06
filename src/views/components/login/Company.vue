@@ -282,7 +282,7 @@
             //将showChild 传入父级
             goToUstc(){
                 // 使用 $emit 触发自定义事件，并传递数据
-                this.$emit('company-event', this.showUstc);
+                this.$emit('company-ustc', this.showUstc);
             }
 
 
