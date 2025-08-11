@@ -136,6 +136,15 @@
         immediate: true
       },
 
+     'loginForm.tenantName':{
+      handler(newVal, oldValue) {
+          console.log(newVal)
+          this.$emit('ustc-tenantName', newVal);
+
+        },
+        immediate: true
+      }
+
       // tenantName:{
       //   handler(newVal, oldValue) {
       //     console.log(newVal, oldValue,"77777777")

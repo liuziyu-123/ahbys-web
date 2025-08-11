@@ -1,14 +1,14 @@
 <template>
-  <div class="login" >
-    
+  <div class="login" :class="{ hidden: is60Percent }">
+    <div class="left-top" :class="{ fontcolor: is60Percent , hidden: showCompany && is60Percent }">
+      <img  alt="" class="left-top-img" src="@/assets/logo/logo.png">
+      <span class="left-top-font"   >   <!--:class="{ fontcolor: is60Percent }"-->
+        安徽24365大学生就业服务云平台
+      </span>
+    </div>
     <!-- 左侧面板 -->
     <div class="split-panel left-panel"  :class="{ hidden: is60Percent }" >
-      <div class="left-top" :class="{ hidden: is60Percent }">
-        <img  alt="" class="left-top-img" src="@/assets/logo/logo.png">
-        <span class="left-top-font"   >   <!--:class="{ fontcolor: is60Percent }"-->
-          安徽24365大学生就业服务云平台
-        </span>
-      </div>
+     
       <div class="panel-content">
         <img key="1" alt="" class="w-350px" src="@/assets/svgs/login-box-bg.svg" />
         <div key="2" class="text-white text-3xl">欢迎使用本系统</div>
@@ -19,14 +19,14 @@
 
  <!-- 右侧面板 -->
     <div class="split-panel right-panel" :class="{ expanded: is60Percent }">
-      <div class="right-top" :class="{ isshow: is60Percent }">
+      <div class="right-top" :class="{ isshow: is60Percent && showCompany && showUstc, hidden: !showUstc && is60Percent   }">
         <img  alt="" class="left-top-img" src="@/assets/logo/logo.png">
         <span class="right-top-font" >
           安徽24365大学生就业服务云平台
         </span>
       </div>
        <Ustc  v-if="showUstc && !showForgetPwd"  @ustc-company="handleUstcCompany" @ustc-forgetPwd="handleUstcForgetPwd"  
-          :show-company="showCompany" />
+          @ustc-tenantName="handleUstcTenantName" :show-company="showCompany" />
        <Company v-else-if="!showUstc && !showForgetPwd"   @company-ustc="handleCompanyUstc"/>
        <ForgetPassword v-else   @forget-ustc="handleForgetUstc" :tenantName="tenantName"/>
     </div>
@@ -137,6 +137,15 @@ export default {
       this.showUstc = showUstc;
       this.showForgetPwd = !showUstc;
       this.showCompany=isCompany
+    },
+
+
+    handleUstcTenantName(tenantName){
+         if(tenantName=='COMPANY'){
+          this.showCompany=true
+         }else{
+          this.showCompany=false
+         }
     }
  
   },
@@ -157,6 +166,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .login {
   display: flex;
+  overflow-y: auto; 
   justify-content: center;
   align-items: center;
   height: 100%;
@@ -205,7 +215,6 @@ export default {
   text-align: center;
 }
 
-
 .right-top-font{
   font-weight: 600;
   font-size: 18px;
@@ -213,9 +222,6 @@ export default {
   color: #303133;
   text-align: center;
 }
-
-
-
 
 
 .left-top{
@@ -232,24 +238,31 @@ export default {
   align-items: center; /* 垂直方向居中对齐 */
 }
 
-
 .right-top{
   display: none;
-  
 }
 
 .right-top.isshow{
   display: flex;
   padding: 0.8rem 1.7rem;
   position: static;
-  margin-top: 0px;
+  margin-top: -315px;
+  margin-left: -40px;
+  /* margin-top: -300px; */
+  height: 300px;
   box-sizing: border-box;
-  margin-top: -71px;
-  margin-left: -43px;
   z-index: 100; /* 确保在其他内容上方 */
   width: 100%;
   align-items: center; /* 垂直方向居中对齐 */
   box-sizing: border-box; /* 确保padding不影响宽度 */
+}
+
+.right-top.hidden{
+  display: flex;
+  align-items: center; /* 垂直方向居中对齐 */
+  margin-right: auto;
+  margin-top: -70px;
+
 }
 
 .w-350px{
@@ -285,8 +298,6 @@ export default {
 }
 
 
-
-
 /* 当左侧面板隐藏时，右侧面板占满容器宽度 */
 .left-panel.hidden {
   display: none;
@@ -295,6 +306,19 @@ export default {
 .right-panel.expanded {
   width: 100%;
 }
+
+.right-top.isshow .right-top-font{
+  color: #303133;
+}
+
+.left-top.fontcolor .left-top-font{
+  color: #303133;
+}
+
+.left-top.hidden{
+  display: none;
+}
+
 
 
 /* 基础响应式调整 */
