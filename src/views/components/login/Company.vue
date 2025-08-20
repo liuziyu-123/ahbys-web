@@ -5,7 +5,7 @@
             <span style="font-size: 18px; color: rgb(14, 144, 210);">注册信息</span>
             <div class="el-divider" style="--el-border-style: solid; margin: 15px 0px;"></div>
             <el-form-item label="统一社会信用代码" prop="socialCreditCode">
-                <el-input v-model="registerForm.socialCreditCode" placeholder="请输入统一社会信用代码" />
+                <el-input v-model="registerForm.socialCreditCode" placeholder="请输入统一社会信用代码" /> <!--91440300MA5DD8D386-->
             </el-form-item>
             <el-form-item label="注册手机号" prop="phone">
                 <el-input v-model="registerForm.phone" placeholder="请输入注册手机号" />
@@ -93,7 +93,7 @@
                     已有账号？去登录
                 </el-button>
             </el-form-item>
-            <!--    
+            <!--
         <el-form-item>
           <el-button type="primary" @click="submitForm('registerForm')">
             注册
@@ -163,10 +163,6 @@
                     enterpriseType: '',
                     economicType: '',
                     personnelScale: '',
-                    enterpriseType: '',
-                    economicType: '',
-                    personnelScale: '',
-                    applicationAddress: '',
                     applicationAddress: '',
                     contactPerson: '',
                     contactPhone: '',
@@ -177,7 +173,8 @@
                 registerRules: {
                     //注册信息
                     socialCreditCode: [
-                        { required: true, message: '请输入统一社会信用代码', trigger: 'blur' },
+                      { required: true, trigger: 'blur', message: '请输入统一社会信用代码' },
+                      { pattern: /^([0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}|[1-9]\d{14})$/, message: '请输入正确的统一社会信用代码格式', trigger: 'blur' }
                     ],
                     phone: [
                         { required: true, validator: validatePhone, trigger: 'blur' },
@@ -195,7 +192,8 @@
 
                     //单位信息
                     unitName: [
-                        { required: true, message: '请输入单位名称', trigger: 'blur' },
+                      { required: true, trigger: 'blur', message: '请输入单位名称' },
+                      { min: 2, max: 100, message: '单位名称长度必须介于 2 和 100 之间', trigger: 'blur' }
                     ],
                     unitNature: [
                         { required: true, message: '请选择单位性质', trigger: 'change' },
@@ -203,18 +201,6 @@
                     unitIndustry: [
                         { required: true, message: '请选择单位行业', trigger: 'change' },
                     ],
-                    // enterpriseType: [
-                    //     { required: true, message: '请选择企业类型', trigger: 'change' },
-                    // ],
-                    // economicType: [
-                    //     { required: true, message: '请选择经济类型', trigger: 'change' },
-                    // ],
-                    // personnelScale: [
-                    //     { required: true, message: '请选择人员规模', trigger: 'change' },
-                    // ],
-                    // applicationAddress: [
-                    //     { required: true, message: '请选择网申地址', trigger: 'change' },
-                    // ],
 
                     //联系方式
                     contactPerson: [
@@ -229,10 +215,6 @@
                     unitAddress: [
                         { required: true, message: '请输入单位地址', trigger: 'blur' },
                     ],
-
-
-
-
                 },
                 countdown: 60,
                 isButtonDisabled: false,
@@ -299,7 +281,8 @@
     }
 
     .el-divider {
-        border-top: 1px var(--el-border-color) var(--el-border-style);
+    /** border-top: 1px var(--el-border-color) var(--el-border-style);  **/
+        border-top: 1px #e5e7eb solid;
         display: block;
         height: 1px;
         margin: 24px 0;
