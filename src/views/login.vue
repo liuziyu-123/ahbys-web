@@ -8,7 +8,7 @@
     </div>
     <!-- 左侧面板 -->
     <div class="split-panel left-panel"  :class="{ hidden: is60Percent }" >
-     
+
       <div class="panel-content">
         <img key="1" alt="" class="w-350px" src="@/assets/svgs/login-box-bg.svg" />
         <div key="2" class="text-white text-3xl">欢迎使用本系统</div>
@@ -19,13 +19,13 @@
 
  <!-- 右侧面板 -->
     <div class="split-panel right-panel" :class="{ expanded: is60Percent }">
-      <div class="right-top" :class="{ isshow: is60Percent && showCompany && showUstc, hidden: !showUstc && is60Percent   }">
+      <div class="right-top" :class="{ isshow: is60Percent && showCompany && showUstc, hidden: !showUstc && is60Percent && !showForgetPwd  }">
         <img  alt="" class="left-top-img" src="@/assets/logo/logo.png">
         <span class="right-top-font" >
           安徽24365大学生就业服务云平台
         </span>
       </div>
-       <Ustc  v-if="showUstc && !showForgetPwd"  @ustc-company="handleUstcCompany" @ustc-forgetPwd="handleUstcForgetPwd"  
+       <Ustc  v-if="showUstc && !showForgetPwd"  @ustc-company="handleUstcCompany" @ustc-forgetPwd="handleUstcForgetPwd"
           @ustc-tenantName="handleUstcTenantName" :show-company="showCompany" />
        <Company v-else-if="!showUstc && !showForgetPwd"   @company-ustc="handleCompanyUstc"/>
        <ForgetPassword v-else   @forget-ustc="handleForgetUstc" :tenantName="tenantName"/>
@@ -41,8 +41,6 @@
 <script>
 import { getCodeImg } from "@/api/login";
 import {Company ,Ustc , ForgetPassword}  from './components/login';
-// import Company  from './components/login/Company';
-// import Ustc  from './components/login/Ustc';
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
 export default {
@@ -100,46 +98,45 @@ export default {
       // 获取最新宽度值
       this.screenWidth = window.screen.width;
       this.pageWidth = window.innerWidth;
-      
+
       // 计算比例和目标宽度
       this.ratio = (this.pageWidth / this.screenWidth) * 100;
       this.targetWidth = this.screenWidth * 0.6;
-      
+
       // 判断是否达到或超过60%
       this.is60Percent = this.ratio <= 60;
     },
     // 处理子组件传递过来的数据  单位注册-登录
     handleCompanyUstc(data) {
-
+      console.log("company to ustc")
       //显示登录界面
       this.showUstc = data
 
       //登录界面显示company
       this.showCompany=true
-      
     },
     //处理登录组件传过来的值 登录-单位注册
     handleUstcCompany(data){
+      console.log("ustc to company")
       this.showUstc = data;
       console.log(!this.showUstc )
       console.log(this.showForgetPwd)
-    
-      //this.
     },
 
+    //处理登录至忘记密码
     handleUstcForgetPwd(showUstc,tenantName){
       this.showUstc = showUstc;
       this.showForgetPwd=true;
       this.tenantName=tenantName
     },
-
+     //处理忘记密码至登录
     handleForgetUstc(showUstc,isCompany){
       this.showUstc = showUstc;
       this.showForgetPwd = !showUstc;
       this.showCompany=isCompany
     },
 
-
+     //处理从单位注册-ustc 时，身份的绑定
     handleUstcTenantName(tenantName){
          if(tenantName=='COMPANY'){
           this.showCompany=true
@@ -147,12 +144,12 @@ export default {
           this.showCompany=false
          }
     }
- 
+
   },
   mounted() {
     // 初始化
     this.updateWidthStatus();
-    
+
     // 监听窗口大小变化
     window.addEventListener('resize', this.updateWidthStatus);
   },
@@ -166,7 +163,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .login {
   display: flex;
-  overflow-y: auto; 
+  overflow-y: auto;
   justify-content: center;
   align-items: center;
   height: 100%;
